@@ -33,6 +33,7 @@ class PageFacilities{
     <h1 class="title is-3" >Add Facility</h1>
     
         <form METHOD="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>" >
+        
         <input type="hidden" name="post" value="add">
         <div class="field">
             <label class="label">Facilities</label>
@@ -64,21 +65,18 @@ class PageFacilities{
         <div class="control">
             <label class="label">Facilities</label>
             </div>
+            
             <input type="hidden" name="facilityID" value="<?php echo $facility->getId(); ?>">
             <div class="control">
+            
                 <input class="input" type="input" name="name" value="<?php echo $facility->getName(); ?>">
-            </div>
-            <div class="control">
-            <label class="label">Active Status</label>
-            </div>
-            <div class="control">
-                <input class="input" type="input" name="active" value="<?php echo $facility->getActive(); ?>" placeholder="Active 1, Not Active 0">
-            </div>
+                <BR>
         </div>
         <div class="field is-grouped">
             <div class="control">
+            <BR>
                 <button class="button is-link">Submit</button>
-                <BR><BR>
+               
             </div>
         </div>
         </form>

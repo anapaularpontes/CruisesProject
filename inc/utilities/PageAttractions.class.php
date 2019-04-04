@@ -26,10 +26,12 @@ static function showAttractions($attractions) {
 </table>';
 }
 
+
+
     static function showAttractionForm($attraction) {
 
       ToursMapper::initialize();
-      $tours = ToursMapper::getTours();
+      $tours = ToursMapper::getTours(array());
 
       if($attraction->getAttractionID() == 0){
         $title = "Add Attraction";
@@ -41,15 +43,15 @@ static function showAttractions($attractions) {
         ?>
 
         <h3 class="title is-3"><?php echo $title; ?></h3>
+        
         <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 
           <div class="field">
-          <label class="label">Attraction</label>
-          <div class="control">
-            <input class="input" type="text" name="attraction" id="attraction" value="<?php echo $attraction->getAttractionName();?>"/> 
+            <label class="label">Attraction</label>
+            <div class="control">
+              <input class="input" type="text" name="attraction" id="attraction" value="<?php echo $attraction->getAttractionName();?>"/> 
+            </div>
           </div>
-          </div>
-
           <div class="field">
             <label class="label">Tour (Ship / Sailing Date)</label>
             <div class="select is-fullwidth">
@@ -63,26 +65,21 @@ static function showAttractions($attractions) {
                   }
                   ?>
               </select>
-
               <script>
                 document.getElementById('tour').value = "<?php echo $attraction->getAttractionTour(); ?>";
               </script>
-
             </div>
           </div>
-          
           <div class="field">
-          <div class="control">
-            <input type="hidden" name="attractionID" value="<?php echo $attraction->getAttractionID();?>">
-            <button class="button is-link" type="submit">Submit</button>
+            <div class="control">
+              <input type="hidden" name="attractionID" value="<?php echo $attraction->getAttractionID();?>">
+              <button class="button is-link" type="submit">Submit</button>
+            </div>
           </div>
-        </div>
-
         </form>
-
+        
         <?php
     }
 }
-
 
 ?>

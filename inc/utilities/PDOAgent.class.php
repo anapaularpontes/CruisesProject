@@ -42,9 +42,11 @@ class PDOAgent    {
         //Initialize the PDO Object
         try {  
             $this->pdo = new PDO($dsn, $this->user, $this->pass, $options);  
-            //Catch any errors
-        } catch (PDOException $e) {  
-            $this->error = $e->getMessage();  
+        } catch (PDOException $e) {
+            PageIndex::showErrors(array('There is a problem trying to connect to the Database'),
+                $e->getMessage());
+            die();
+
         }  
         
     }
@@ -52,7 +54,14 @@ class PDOAgent    {
     //Take a query, store it as a prepared statement
     public function query(string $query) {
             //Take the query and prepare a statement, store it in the class for later execution
-            $this->stmt = $this->pdo->prepare($query);  
+            if($this->pdo != null) {
+                $this->stmt = $this->pdo->prepare($query); 
+            } else {
+                PageIndex::showErrors(array('There is a problem trying to connect to the Database'),
+                    'Error on the prepare!');
+                die();
+            }
+            
     }
 
     //Bind Parmemters and values for the prepared statement 
@@ -79,11 +88,18 @@ class PDOAgent    {
     
     //Execute the prepared statement
     public function execute($data = null)   {
-        if (is_null($data)) {  
-            return $this->stmt->execute();  
-        } else {
-            return $this->stmt->execute($data);
+        try {
+            if (is_null($data)) {  
+                return $this->stmt->execute();  
+            } else {
+                return $this->stmt->execute($data);
+            }
+        } catch(Exception $ex) {
+            PageIndex::showErrors(array('There is a problem trying to connect to the Database'),
+                $ex->getMessage());
+            die();
         }
+        
     }
 
 

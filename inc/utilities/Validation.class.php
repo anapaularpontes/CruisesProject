@@ -2,7 +2,9 @@
 
 class Validation {
     public static function validateCity($f, &$e) {
-        
+        if(strlen($_POST['name']) == 0){
+            $e[] = "City name is needed";
+        }
     }
 
     public static function validateTour(&$e, & $tour) {
@@ -50,6 +52,70 @@ class Validation {
             $tour->setId($_POST['id']);
         }
     }
+
+
+    public static function validateFacilities() : Array   {
+
+        //Initialize and empty array
+        $messages = array();
+
+        //Validate
+        if(strlen($_POST["name"]) == 0){
+
+            $messages[] = "Facility Name infomation is missing";
+        }
+
+        return $messages;
+    }
+
+        public static function validateFacilitiesShip() : Array   {
+
+            //Initialize and empty array
+            $messages = array();
+    
+            //Validate
+            if(isset($_POST["searchButton"]) && $_POST["searchValue"] == 0){
+                /*  check the search button was clicked & if the value was 0
+                    do nothing, check for the other validation as it is not going
+                    to the database just preforming a search
+                    the search value can be empty and will show all results if the
+                    search button is clicked */
+            }else{
+
+                if($_POST["shipOptions"] == 0){
+    
+                    $messages[] = "Ship infomation is missing";
+                }
+        
+                if($_POST["facilityOptions"] == 0){
+        
+                    $messages[] = "Facility information is missing";
+                }
+            }
+            return $messages;
+        }
+
+        public static function validateAttraction(& $e) {
+
+            if(empty($_POST['attraction']) || strlen(trim($_POST['attraction']))==0)
+                $e[] = 'Attraction name is missing.';
+    
+                settype($_POST['tour'], 'int');
+            if(empty($_POST['tour']) ||!is_integer($_POST['tour']) || $_POST['tour']==0 || $_POST['tour']=="0")
+                $e[] = ('Tour information is missing.');
+            
+        }
+    
+        public static function validateShip(& $e) {
+    
+            if(empty($_POST['name']) || strlen(trim($_POST['name']))==0)
+                $e[] = 'Ship name is missing.';
+    
+            settype($_POST['year'], 'int');
+            if(empty($_POST['year']) || !is_integer($_POST['year']) || $_POST['year']==0)
+                $e[] = ('Year of service is missing.');
+        }
+
 }
 
 ?>

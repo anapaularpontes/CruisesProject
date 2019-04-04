@@ -10,6 +10,7 @@ require_once('inc/utilities/PDOAgent.class.php');
 require_once('inc/utilities/FacilitiesMapper.class.php');
 require_once('inc/utilities/PageIndex.class.php');
 require_once('inc/utilities/PageFacilities.class.php');
+require_once('inc/utilities/Validation.class.php');
 
 PageIndex::header();
 
@@ -20,6 +21,9 @@ if(!empty($_GET)){
          case 'delete':
 
             FacilitiesMapper::deleteFacility($_GET["id"]);
+
+            PageIndex::showMessages('Facility id->'.$_GET['id'].' removed.');
+
             break;
 
          case "edit":
@@ -31,26 +35,43 @@ if(!empty($_GET)){
 
 
 if(!empty($_POST)){
-    switch($_POST['post']){
-        case 'add':
-            $newFacility = new Facilities();
 
-            $newFacility->setName($_POST["name"]);
+    $errors = Validation::validateFacilities();
 
-            FacilitiesMapper::addFacility($newFacility);
-            break;
-        
-        case 'update':
-            $updateFacility = new Facilities();
+    if(!empty($errors)){
 
-            $updateFacility->setID($_POST["facilityID"]);
-            $updateFacility->setName($_POST["name"]);
-            $updateFacility->setActive($_POST["active"]);
+        PageIndex::showErrors($errors);
 
-            FacilitiesMapper::editFacility($updateFacility);
-            break;
+    }else{
+
+        switch($_POST['post']){
+            case 'add':
+                $newFacility = new Facilities();
+    
+                $newFacility->setName($_POST["name"]);
+    
+                $id = FacilitiesMapper::addFacility($newFacility);
+
+                PageIndex::showMessages('Facility id->'.$id. ' added.');
+
+                break;
+            
+            case 'update':
+                $updateFacility = new Facilities();
+    
+                $updateFacility->setID($_POST["facilityID"]);
+                $updateFacility->setName($_POST["name"]);
+    
+                FacilitiesMapper::editFacility($updateFacility);
+                
+                PageIndex::showMessages('Facility id->'.$_POST['facilityID'].' updated.');
+
+                break;
+        }
     }
 }
+
+    
 
 
 $facilities = FacilitiesMapper::getFacilities();
@@ -60,10 +81,12 @@ PageFacilities::showFacilities($facilities);
 if(!empty($_GET) && $_GET['action'] == "edit"){
 
     PageFacilities::editFacilitiesForm($editFacility);
+
+
 }else{
 
     PageFacilities::addFacilitiesForm();
 }
 
-PageFacilities::facilitiiesFooter();
+PageIndex::footer();
 ?>

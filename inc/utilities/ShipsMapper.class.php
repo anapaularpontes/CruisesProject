@@ -43,7 +43,7 @@ class ShipsMapper {
     }
 
     static function getShips() {
-        $sql = 'select * from Ships where active=1;';
+        $sql = 'select * from Ships where active=1 order by name asc;';
         self::$db->query($sql);
         self::$db->execute();
         return self::$db->resultSet();

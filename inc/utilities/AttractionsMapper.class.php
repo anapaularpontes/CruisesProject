@@ -44,7 +44,8 @@ class AttractionsMapper {
     static function getAttractions() {
         $sql = 'select Attractions.id, Attractions.attraction, Attractions.tour, Ships.name as shipName, Tours.sailing_date
                 from Attractions, Tours, Ships
-                where Attractions.tour = Tours.id and Tours.ship = Ships.id;';
+                where Attractions.tour = Tours.id and Tours.ship = Ships.id
+                order by attraction asc;';
         self::$db->query($sql);
         self::$db->execute();
         return self::$db->resultSet();

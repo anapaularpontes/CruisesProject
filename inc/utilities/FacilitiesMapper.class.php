@@ -11,7 +11,7 @@ class FacilitiesMapper{
     }
 
 
-    static function getFacilities() : Array{
+    static function getFacilities() : Array {
 
         $sqlSelect = "SELECT * FROM Facilities;";
 
@@ -54,8 +54,7 @@ class FacilitiesMapper{
 
     static function editFacility(Facilities $facility) : bool {
 
-        $sqlUpdate = "UPDATE facilities SET name = :updateName,
-                                            active = :updateActive
+        $sqlUpdate = "UPDATE facilities SET name = :updateName
                                             WHERE id = :updateID";
 
         try{
@@ -64,7 +63,6 @@ class FacilitiesMapper{
 
           
             self::$db->bind(":updateName", $facility->getName());
-            self::$db->bind(":updateActive", $facility->getActive());
             self::$db->bind(":updateID", $facility->getID());
 
             self::$db->execute();

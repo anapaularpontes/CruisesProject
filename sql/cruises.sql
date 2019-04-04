@@ -112,19 +112,42 @@ insert into tours (sailing_date,duration,ship,from_city,to_city,oneway) values
   ('2019-08-10', 10, 5, 8, 6, 1);
 
 insert into attractions (attraction, tour) values 
-  ('Phill Show', 1),
-  ('Cirque', 2),
-  ('Elton John show', 3),
-  ('Justin show', 4),
-  ('Paul McCartney', 5);
+  ('Phil Collins Concert', 1),
+  ('Bob Marley Concert', 3),
+  ('Justin Timberlake Concert', 7),
+  ('Cirque du Soleil', 9),
+  ('David Copperfield Show', 10),
+  ('Roberto Carlos Concert', 14),
+  ('Paul McCartney Concert', 18),
+  ('Elton John Concert', 20),
+  ('Celine Dion Concert', 22),
+  ('Ed Sheeran Concert', 23);
 
-insert into facilities_ship (facilities,ship) values 
+insert into facilities_ship (ship, facilities) values 
   (1,1),
-  (5,2),
-  (4,3),
+  (2,1),
+  (4,1),
+  (5,1),
+  (1,2),
+  (2,2),
+  (4,2),
+  (1,3),
+  (3,3),
+  (2,4),
   (3,4),
+  (4,4),
+  (5,4),
+  (1,5),
+  (3,5),
   (4,5),
+  (2,6),
   (4,6),
-  (3,6),
+  (5,6),
   (2,7),
-  (2,8);
+  (3,7),
+  (4,7),
+  (5,7),
+  (1,8),
+  (2,8),
+  (4,8),
+  (5,8);

@@ -16,6 +16,8 @@ class ToursMapper {
     // | to_city      | int(11) | NO   | MUL | NULL    |                |
     // | oneway       | int(1)  | NO   |     | NULL    |                |
     // +--------------+---------+------+-----+---------+----------------+
+
+    // Getting all tours applying the filters
     static function getTours($filters) : Array{
         $fStr = "";
         if(!empty($filters)) {
@@ -27,12 +29,25 @@ class ToursMapper {
                     case 'Destiny':
                         $field = 't.to_city';
                         break;
+                    case 'Attraction':
+                        $field = 'a.id';
+                        break;
+                    case 'Ship':
+                        $field = 't.ship';
+                        break;
+                    default: unset($field);
+                        break;
                 }
-                $fStr .= ' '.$field.' = '.$filter.' and ';
+                if(!empty($field)) {
+                    $fStr .= ' '.$field.' = '.$filter.' and ';
+                }
             }
             $fStr = substr($fStr, 0, (strlen($fStr)-4));
-            $fStr = ' where ('.$fStr.')';
-            //echo $fStr;
+            if(!empty($fStr)) {
+                $fStr = ' where ('.$fStr.')';    
+            } else {
+                $fStr = '';
+            }
         }
         
         self::$db->query('select t.id,t.sailing_date,t.ship,t.duration,t.from_city,t.to_city,
@@ -40,10 +55,13 @@ class ToursMapper {
             from tours t
             inner join cities c on c.id = t.to_city
             inner join cities ci on ci.id = t.from_city
-            inner join ships s on s.id = t.ship '.$fStr.';');
+            left join attractions a on a.tour = t.id
+            inner join ships s on s.id = t.ship '.$fStr.' order by t.sailing_date;');
         self::$db->execute();
         return self::$db->resultSet();
     }
+
+    // Get a single tour
     static function getTour(int $id) :Tour {
         self::$db->query('select id,sailing_date,duration,ship,from_city,to_city,oneway from tours
             where id = :id limit 1;');
@@ -52,6 +70,7 @@ class ToursMapper {
         return self::$db->singleResult();
     }
 
+    // Add tour
     static function addTour(Tour $tour) : int {
         self::$db->query('insert into tours (sailing_date, duration, ship, from_city, 
             to_city, oneway) values (:sailing_date, :duration, :ship, :from_city, 
@@ -68,6 +87,7 @@ class ToursMapper {
         return self::$db->lastInsertId();
     }
 
+    // Edit Tour
     static function editTour(Tour $tour) : int {
         self::$db->query('update tours set  
             sailing_date = :sailing_date,
@@ -90,13 +110,13 @@ class ToursMapper {
             return self::$db->rowCount();
     }
 
+    // delete tour
     static function deleteTour(int $id) : int {
         self::$db->query('delete from tours where id = :id limit 1;');
         self::$db->bind(':id', $id);
         self::$db->execute();
         return self::$db->rowCount();
     }
-
 }
 
 ?>

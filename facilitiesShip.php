@@ -15,55 +15,72 @@ require_once('inc/utilities/FacilitiesMapper.class.php');
 
 require_once('inc/utilities/PageIndex.class.php');
 require_once('inc/utilities/PageFacilitiesShip.class.php');
+require_once('inc/utilities/Validation.class.php');
 
 PageIndex::header();
 
 FacilitiesShipMapper::initialize("Facilities_Ship");
 FacilitiesMapper::initialize("Facilities");
 
+
 if(!empty($_GET)){
 
     switch($_GET['action']){
         case 'delete':
-            FacilitiesShipMapper::deleteFS($_GET["id"]);
+            $delete = FacilitiesShipMapper::deleteFS($_GET["id"]);
+            PageIndex::showMessages('Facility id->'.$_GET["id"]. ' removed.');
+
             break;
         case 'edit':
 
             $updateFS = FacilitiesShipMapper::getFS($_GET["id"]);
-            var_dump($updateFS);
+           
             break;
     }
 }
-
 
 if(!empty($_POST)){
-    switch($_POST['post']){
-        case 'add':
-            $newFS = new Facilities_Ship();
 
-            $newFS->setShip($_POST["shipOptions"]);
-            $newFS->setFacilities($_POST["facilityOptions"]);
+    $errors = Validation::validateFacilitiesShip();
 
-            FacilitiesShipMapper::addNewFS($newFS);
-            break;
+        if(!empty($errors)){
+
+            PageIndex::showErrors($errors);
+            
+        }else{
+
+            switch($_POST['post']){
+                case 'add':
+                    $newFS = new Facilities_Ship();
         
-        case 'update':
-            $update = new Facilities_Ship();
+                    $newFS->setShip($_POST["shipOptions"]);
+                    $newFS->setFacilities($_POST["facilityOptions"]);
+        
+                    $n = FacilitiesShipMapper::addNewFS($newFS);
 
-            $update->setID($_POST["fsid"]);
-            $update->setFacilities($_POST["facilityOptions"]);
-            $update->setShip($_POST["shipOptions"]);
+                    PageIndex::showMessages('Facility id->'.$n. ' added.');
+                    break;
+                
+                case 'update':
+                    $update = new Facilities_Ship();
+        
+                    $update->setID($_POST["fsid"]);
+                    $update->setFacilities($_POST["facilityOptions"]);
+                    $update->setShip($_POST["shipOptions"]);
+        
+                    FacilitiesShipMapper::editFS($update);
 
-            FacilitiesShipMapper::editFS($update);
-            break;
+                    PageIndex::showMessages('Facility id->'.$_POST["fsid"]. ' updated.');
+                    break;
 
-        case 'search':
-           $search = FacilitiesShipMapper::search($_POST['searchValue']);
-           //var_dump($search);
-           PageFacilitiesShip::displaySearchResults($search);
-            break;
-    }
-}
+                case 'search':
+                    $search = FacilitiesShipMapper::search($_POST['searchValue']);
+                    //var_dump($search);
+                    PageFacilitiesShip::displaySearchResults($search);
+                    break;
+                }
+            }
+        }
 
 
 
@@ -94,5 +111,6 @@ if(!empty($_GET) && $_GET['action'] == "edit"){
         PageFacilitiesShip::addForm($allShips, $allFacilities);
 }
 
+PageIndex::footer();
 
 ?>

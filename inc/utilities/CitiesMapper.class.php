@@ -3,7 +3,7 @@
 class CitiesMapper {
     
     static private $db;
-
+    
     public static function initialize() {
         self::$db = new PDOAgent('City');
     }

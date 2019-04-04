@@ -13,7 +13,7 @@ class PageCities {
                 <td>'.$city->getName().'</td>
                 <td style="text-align:center;">
                 <a href="'.$_SERVER['PHP_SELF'].'?id='.$city->getId().'&a=e" class="button is-primary">Edit</a>
-                <a href="'.$_SERVER['PHP_SELF'].'?id='.$city->getId().'&a=d" class="button is-primary">Delete</a>
+                <a href="'.$_SERVER['PHP_SELF'].'?id='.$city->getId().'&a=d" class="button is-warning">Delete</a>
                 </td>
             </tr>';
         }
@@ -41,7 +41,8 @@ class PageCities {
             <div class="control">
                 <button class="button is-link">Submit</button>
             </div>
-        </div>
+            <BR>
+        </div><BR>
         </form>
     <?php
     }
